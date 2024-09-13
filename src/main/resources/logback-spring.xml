@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="LOG_PATH" value="logs"/>
+    <!-- date, thread name, log level, class name,message,newline -->
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%-5level] %-40.40logger{39} : %msg%n"/>
+
+    <!-- console input -->
+    <appender name="consoleLog" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- color log -->
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss} [%thread] %magenta(%-5level) %green([%-50.50class]) >>> %cyan(%msg) %n
+            </pattern>
+        </layout>
+    </appender>
+
+    <appender name="fileLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+
+            <!-- ${LOG_PATH} property resolves value from the property in this XML file -->
+            <!-- Each file is going to have a date -->
+            <!-- %i- increment the log files to 1.2...n -->
+            <fileNamePattern>${LOG_PATH}/cms.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+
+            <!-- Each file is going to have a max size-->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+
+            <!-- Maximum number of files-->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="consoleLog"/>
+        <appender-ref ref="fileLog"/>
+    </root>
+</configuration>
