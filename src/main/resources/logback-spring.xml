@@ -15,25 +15,27 @@
     </appender>
 
     <appender name="fileLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <file>${LOG_PATH}/cms.log</file> <!-- Active log file -->
 
-            <!-- ${LOG_PATH} property resolves value from the property in this XML file -->
-            <!-- Each file is going to have a date -->
-            <!-- %i- increment the log files to 1.2...n -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- Logs are rotated based on the date and size -->
             <fileNamePattern>${LOG_PATH}/cms.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
 
-            <!-- Each file is going to have a max size-->
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>100MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
+            <!-- Maximum size of a single log file before rollover happens -->
+            <maxFileSize>100MB</maxFileSize>
 
-            <!-- Maximum number of files-->
+            <!-- Maximum number of days to keep log files -->
             <maxHistory>30</maxHistory>
+
+            <!-- Maximum total size of all log files (after reaching this, old files are deleted) -->
+            <totalSizeCap>3GB</totalSizeCap>
         </rollingPolicy>
+
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>${LOG_PATTERN}</pattern>
         </encoder>
     </appender>
+
 
     <root level="info">
         <appender-ref ref="consoleLog"/>
